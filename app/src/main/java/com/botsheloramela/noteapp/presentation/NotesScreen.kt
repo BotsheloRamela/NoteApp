@@ -1,6 +1,8 @@
 package com.botsheloramela.noteapp.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.botsheloramela.noteapp.R
 import com.botsheloramela.noteapp.data.Note
+import com.botsheloramela.noteapp.domain.DateTimeUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +47,7 @@ fun NotesScreen(
     navController: NavController,
     eventHandler: (NotesEvent) -> Unit
 ) {
+
     Scaffold(
         topBar = {
             Row(
@@ -78,7 +85,7 @@ fun NotesScreen(
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = "Add note",
-                    modifier = Modifier.size(35.dp),
+                    modifier = Modifier.size(30.dp),
                     tint = MaterialTheme.colorScheme.onSecondary
                 )
             }
@@ -89,7 +96,7 @@ fun NotesScreen(
             contentPadding = paddingValues,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(15.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(notes.size) { index ->
@@ -107,37 +114,52 @@ fun NoteCard(
     note: Note,
     onEvent: (NotesEvent) -> Unit
 ) {
+
+    val formattedDate = remember(note.timestamp) {
+        val localDateTime = DateTimeUtil.millisToLocalDateTime(note.timestamp)
+        DateTimeUtil.formatNoteDate(localDateTime)
+    }
+
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)
-            .padding(12.dp),
+            .padding(16.dp),
     ) {
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(text = note.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(text = note.content,
-                fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-
-            IconButton(onClick = { onEvent(NotesEvent.DeleteNote(note))}) {
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = note.title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
                 Icon(
-                    imageVector = Icons.Rounded.Delete,
+                    imageVector = Icons.Default.Close,
                     contentDescription = "Delete note",
-                    modifier = Modifier.size(35.dp),
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier
+                        .clickable(MutableInteractionSource(), null) {
+                            onEvent(NotesEvent.DeleteNote(note))
+                        }
                 )
             }
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = note.content,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = formattedDate,
+                color = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.align(Alignment.End)
+            )
         }
+
     }
 }

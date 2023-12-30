@@ -4,6 +4,10 @@ import kotlinx.datetime.*
 
 object DateTimeUtil {
 
+    fun millisToLocalDateTime(millis: Long): LocalDateTime {
+        return Instant.fromEpochMilliseconds(millis).toLocalDateTime(TimeZone.currentSystemDefault())
+    }
+
     fun formatNoteDate(dateTime: LocalDateTime): String {
         val month = dateTime.month.name.lowercase().take(3).replaceFirstChar { it.uppercase() }
         val day = if(dateTime.dayOfMonth < 10) "0${dateTime.dayOfMonth}" else dateTime.dayOfMonth
