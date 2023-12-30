@@ -79,4 +79,6 @@ dependencies {
     // Extended Icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
 }
