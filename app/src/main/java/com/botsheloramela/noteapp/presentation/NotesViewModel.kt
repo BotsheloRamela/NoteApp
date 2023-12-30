@@ -14,19 +14,23 @@ class NotesViewModel(
     private val dao: NoteDao
 ): ViewModel() {
 
-    // State variables
-    private val title: MutableState<String> = mutableStateOf("")
-    private val content: MutableState<String> = mutableStateOf("")
-    private val isSortedByDateAdded: MutableState<Boolean> = mutableStateOf(true)
     private val _notes: MutableState<List<Note>> = mutableStateOf(emptyList())
-
     val notes: State<List<Note>> by mutableStateOf(_notes)
+
+    // State for note input
+    private val _titleState: MutableState<String> = mutableStateOf("")
+    val titleState: State<String> by mutableStateOf(_titleState)
+
+    private val _contentState: MutableState<String> = mutableStateOf("")
+    val contentState: State<String> by mutableStateOf(_contentState)
+
+    private val isSortedByDateAdded: MutableState<Boolean> = mutableStateOf(true)
 
     // Event handling
     fun onEvent(event: NotesEvent) {
         when (event) {
             is NotesEvent.DeleteNote -> deleteNote(event.note)
-            is NotesEvent.SaveNote -> saveNote()
+            is NotesEvent.SaveNote -> saveNote(event.title, event.content)
             NotesEvent.SortNotes -> isSortedByDateAdded.value = !isSortedByDateAdded.value
         }
     }
@@ -37,18 +41,18 @@ class NotesViewModel(
         }
     }
 
-    private fun saveNote() {
+    private fun saveNote(title: String, content: String) {
         val note = Note(
-            title = title.value,
-            content = content.value,
+            title = title,
+            content = content,
             timestamp = System.currentTimeMillis()
         )
 
         viewModelScope.launch {
             dao.upsertNote(note)
             // Clear input fields after saving
-            title.value = ""
-            content.value = ""
+            _titleState.value = ""
+            _contentState.value = ""
         }
     }
 

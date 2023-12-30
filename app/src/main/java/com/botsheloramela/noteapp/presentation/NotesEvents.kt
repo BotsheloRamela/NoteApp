@@ -7,8 +7,5 @@ sealed interface NotesEvent {
 
     data class DeleteNote(val note: Note): NotesEvent
 
-    data class SaveNote(
-        val title: String,
-        val content: String
-    ): NotesEvent
+    data class SaveNote(val title: String, val content: String): NotesEvent
 }
