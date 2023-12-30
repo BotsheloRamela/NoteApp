@@ -19,10 +19,8 @@ class NotesViewModel(
 
     // State for note input
     private val _titleState: MutableState<String> = mutableStateOf("")
-    val titleState: State<String> by mutableStateOf(_titleState)
 
     private val _contentState: MutableState<String> = mutableStateOf("")
-    val contentState: State<String> by mutableStateOf(_contentState)
 
     private val isSortedByDateAdded: MutableState<Boolean> = mutableStateOf(true)
 

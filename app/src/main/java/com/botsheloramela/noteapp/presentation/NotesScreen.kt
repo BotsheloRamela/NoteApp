@@ -16,8 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Sort
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -102,7 +100,7 @@ fun NotesScreen(
             items(notes.size) { index ->
                 NoteCard(
                     note = notes[index],
-                    onEvent = eventHandler
+                    onEvent = eventHandler,
                 )
             }
         }
@@ -120,46 +118,43 @@ fun NoteCard(
         DateTimeUtil.formatNoteDate(localDateTime)
     }
 
-    Row(
+    Column(
         modifier = Modifier
             .clip(RoundedCornerShape(5.dp))
             .background(MaterialTheme.colorScheme.primaryContainer)
             .padding(16.dp),
     ) {
-        Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = note.title,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Delete note",
-                    tint = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier
-                        .clickable(MutableInteractionSource(), null) {
-                            onEvent(NotesEvent.DeleteNote(note))
-                        }
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = note.content,
-                fontWeight = FontWeight.Light,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = note.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onPrimary
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = formattedDate,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.align(Alignment.End)
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Delete note",
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier
+                    .clickable(MutableInteractionSource(), null) {
+                        onEvent(NotesEvent.DeleteNote(note))
+                    }
             )
         }
-
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(text = note.content,
+            fontWeight = FontWeight.Light,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = formattedDate,
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.align(Alignment.End)
+        )
     }
 }
