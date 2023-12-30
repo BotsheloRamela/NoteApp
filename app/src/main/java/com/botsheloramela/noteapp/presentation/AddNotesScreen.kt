@@ -52,7 +52,7 @@ fun AddNotesScreen(
                     imageVector = Icons.Rounded.Check,
                     contentDescription = "Save Note",
                     modifier = Modifier.size(35.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
         }

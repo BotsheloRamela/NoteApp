@@ -84,7 +84,7 @@ fun NotesScreen(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = "Add note",
                     modifier = Modifier.size(30.dp),
-                    tint = MaterialTheme.colorScheme.onSecondary
+                    tint = MaterialTheme.colorScheme.background
                 )
             }
         }
@@ -133,7 +133,7 @@ fun NoteCard(
                 text = note.title,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = MaterialTheme.colorScheme.background
             )
             Icon(
                 imageVector = Icons.Default.Close,
@@ -148,12 +148,12 @@ fun NoteCard(
         Spacer(modifier = Modifier.height(12.dp))
         Text(text = note.content,
             fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.background
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = formattedDate,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.background,
             modifier = Modifier.align(Alignment.End)
         )
     }
